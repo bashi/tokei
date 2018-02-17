@@ -1,0 +1,15 @@
+{
+  "name": "clock-nt",
+  "version": "0.1.0",
+  "description": "A clock",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "author": "Kenichi Ishibashi",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "typescript": "^2.7.2"
+  }
+}

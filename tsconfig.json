@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "outDir": "./public/",
+        "strict": true,
+        "module": "commonjs",
+        "target": "es2015"
+    }
+}

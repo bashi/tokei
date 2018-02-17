@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clock</title>
+    <script defer src="index.js"></script>
+  </head>
+  <body>
+    <style>
+      :root {
+        --primary-font-family: 'Roboto';
+      }
+
+      html { height: 100%; }
+      body { font-family: var(--primary-font-family), sans-serif; margin: 0; padding: 0; height: 100%; }
+
+      .clocks-container {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+      }
+      .main-clock {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      .main-clock-time {
+        font-weight: bold;
+        color: #444;
+        font-size: 3.0rem;
+      }
+      .subclock-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      .subclock-time {
+        font-size: 2.5rem;
+      }
+    </style>
+    <div id="app">
+      <div class="clocks-container">
+        <div class="main-clock">
+          <div class="main-clock-time">11:16</div>
+          <div class="main-clock-date">Feb 17, Sat</div>
+        </div>
+        <div class="subclock-list">
+          <div class="subclock-container">
+            <div class="subclock-city-name">Mountain View</div>
+            <div class="subclock-time-difference">Yesterday, -17 hrs</div>
+            <div class="subclock-time">18:16</div>
+          </div>
+          <div class="subclock-container">
+              <div class="subclock-city-name">Milan</div>
+              <div class="subclock-time-difference">-18 hrs</div>
+              <div class="subclock-time">3:16</div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </body>
+</html>
