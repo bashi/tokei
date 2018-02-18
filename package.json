@@ -1,5 +1,5 @@
 {
-  "name": "clock-nt",
+  "name": "nt-clock",
   "version": "0.1.0",
   "description": "A clock",
   "main": "dist/index.js",
