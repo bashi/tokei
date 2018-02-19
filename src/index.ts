@@ -18,15 +18,26 @@ function createSubClock(date: Date, entry: SubClockEntry): HTMLElement {
     cityNameEl.textContent = entry.name;
     el.appendChild(cityNameEl);
 
+    const offset = date.getTimezoneOffset() + entry.utcOffsetInMinuts;
+    const cityDate = new Date(date.getTime() + offset * 60 * 1000);
+
+    let timeDifferenceContent = '';
+    if (date.getTimezoneOffset() != entry.utcOffsetInMinuts) {
+        if (date.getDate() < cityDate.getDate()) {
+            timeDifferenceContent = 'Tomorrow, ';
+        } else if (date.getDate() > cityDate.getDate()) {
+            timeDifferenceContent = 'Yesterday, ';
+        }
+    }
+    timeDifferenceContent += (offset / 60).toFixed() + ' hrs';
+
     const timeDifferenceEl = document.createElement('div');
     timeDifferenceEl.classList.add('subclock-time-difference');
-    const offset = date.getTimezoneOffset() + entry.utcOffsetInMinuts;
-    timeDifferenceEl.textContent = (offset / 60).toFixed() + ' hrs';
+    timeDifferenceEl.textContent = timeDifferenceContent;
     el.appendChild(timeDifferenceEl);
 
     const timeEl = document.createElement('div');
     timeEl.classList.add('subclock-time');
-    const cityDate = new Date(date.getTime() + offset * 60 * 1000);
     timeEl.textContent = formatTime(cityDate);
     el.appendChild(timeEl);
     return el;
@@ -84,6 +95,12 @@ function getMockSubClockEntries(): Promise<Array<SubClockEntry>> {
             formattedAddress: 'Milan',
             description: 'Milan',
             utcOffsetInMinuts: 60,
+        },
+        {
+            name: 'Sydney',
+            formattedAddress: 'Sydney',
+            description: 'Sydney',
+            utcOffsetInMinuts: 660,
         },
     ];
     return Promise.resolve(mockEntries);
