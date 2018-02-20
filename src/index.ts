@@ -81,7 +81,7 @@ function getSubClockEntries(): Promise<Array<SubClockEntry>> {
                 .then(mockEntries => {
                     const data = JSON.stringify(mockEntries);
                     localStorage.setItem(key, data);
-                    return mockEntries;
+                    resolve(mockEntries);
                 });
         }
     });
