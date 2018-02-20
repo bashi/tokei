@@ -1,6 +1,8 @@
 function formatTime(date: Date): string {
     const timeString = date.toLocaleTimeString();
-    return timeString.substr(0, timeString.length - 3);
+    const hours = date.getHours().toString();
+    const minutes = ('00' + date.getMinutes().toString()).slice(-2);
+    return `${hours}:${minutes}`;
 }
 
 interface SubClockEntry {
@@ -28,6 +30,9 @@ function createSubClock(date: Date, entry: SubClockEntry): HTMLElement {
         } else if (date.getDate() > cityDate.getDate()) {
             timeDifferenceContent = 'Yesterday, ';
         }
+    }
+    if (offset > 0) {
+        timeDifferenceContent += '+';
     }
     timeDifferenceContent += (offset / 60).toFixed() + ' hrs';
 
@@ -160,7 +165,9 @@ function getCityEntry(description: string, placeId: string): Promise<SubClockEnt
 // --- App
 
 class App {
+    private previousDate?: Date;
     private subclocks: Array<SubClockEntry>;
+
     constructor(subclocks: Array<SubClockEntry>) {
         this.subclocks = subclocks;
     }
@@ -172,8 +179,15 @@ class App {
 
     private update() {
         const date = new Date();
+        if (!this.previousDate || this.previousDate.getMinutes() !== date.getMinutes()) {
+            this.updateInternal(date);
+        }
+    }
+
+    private updateInternal(date: Date) {
         updateMainClock(date);
         updateSubClocks(date, this.subclocks);
+        this.previousDate = date;
     }
 }
 

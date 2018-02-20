@@ -11,6 +11,7 @@
     <style>
       :root {
         --primary-font-family: 'Roboto';
+        --clock-color: #444;
       }
 
       html { height: 100%; }
@@ -32,7 +33,7 @@
       }
       .main-clock-time {
         font-weight: bold;
-        color: #444;
+        color: var(--clock-color);
         font-size: 3.0rem;
       }
       .subclock-container {
@@ -42,16 +43,19 @@
         margin-bottom: 1rem;
       }
       .subclock-time {
+        font-weight: bold;
+        color: var(--clock-color);
         font-size: 2.5rem;
       }
     </style>
     <div id="app">
       <div class="clocks-container">
         <div class="main-clock">
-          <div class="main-clock-time">11:16</div>
-          <div class="main-clock-date">Feb 17, Sat</div>
+          <div class="main-clock-time"></div>
+          <div class="main-clock-date"></div>
         </div>
         <div class="subclock-list">
+          <!-- This will lock like this.
           <div class="subclock-container">
             <div class="subclock-city-name">Mountain View</div>
             <div class="subclock-time-difference">Yesterday, -17 hrs</div>
@@ -62,6 +66,7 @@
             <div class="subclock-time-difference">-18 hrs</div>
             <div class="subclock-time">3:16</div>
           </div>
+          -->
         </div>
 
         <div class="add-subclock-pane" hidden>
