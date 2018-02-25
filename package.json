@@ -2,14 +2,16 @@
   "name": "nt-clock",
   "version": "0.1.0",
   "description": "A clock",
-  "main": "dist/index.js",
+  "main": "public/index.js",
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "dev": "http-server -p 3002"
   },
   "author": "Kenichi Ishibashi",
   "license": "Apache-2.0",
   "devDependencies": {
+    "http-server": "^0.11.1",
     "typescript": "^2.7.2"
   }
 }

@@ -33,6 +33,7 @@ function createSubClocksStore(): Promise<SubClocksStore> {
 
 class SubClocksStore {
     private db: IDBDatabase;
+
     constructor(db: IDBDatabase) {
         this.db = db;
     }
