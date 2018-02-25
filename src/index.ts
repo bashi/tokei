@@ -168,7 +168,7 @@ class SubClockAddPane {
 
     private placeChanged() {
         const place = this.autocomplete.getPlace();
-        if (!place) {
+        if (!place || !place.utc_offset) {
             return;
         }
         const entry = {
