@@ -10,30 +10,80 @@ interface SubClockEntry {
     name: string;
     formattedAddress: string;
     utcOffsetInMinuts: number;
+    sortOrder: number;
 }
 
 // --- Storage
-// TODO: Don't use localStorage
-const STORAGE_KEY = 'subclocks-v2';
 
-function getSubClockEntries(): Promise<Array<SubClockEntry>> {
-    return new Promise((resolve) => {
-        const data = localStorage.getItem(STORAGE_KEY);
-        if (data) {
-            const entries = JSON.parse(data);
-            resolve(entries);
-        } else {
-            resolve([]);
-        }
+const STORE_DB_NAME = 'clock';
+const STORE_DB_VERSION = 1;
+const SUBCLOCKS_STORE_NAME = 'subclocks';
+
+function createSubClocksStore(): Promise<SubClocksStore> {
+    const request = indexedDB.open(STORE_DB_NAME, STORE_DB_VERSION);
+    return new Promise((resolve, reject) => {
+        request.onerror = (e) => reject(e);
+        request.onupgradeneeded = (e) => {
+            const db = request.result as IDBDatabase;
+            db.createObjectStore(SUBCLOCKS_STORE_NAME, { keyPath: 'placeId' });
+        };
+        request.onsuccess = () => resolve(new SubClocksStore(request.result));
     });
 }
 
-function storeSubClockEntries(entries: Array<SubClockEntry>) {
-    return new Promise((resolve) => {
-        const data = JSON.stringify(entries);
-        localStorage.setItem(STORAGE_KEY, data);
-        resolve();
-    });
+class SubClocksStore {
+    private db: IDBDatabase;
+    constructor(db: IDBDatabase) {
+        this.db = db;
+    }
+
+    getEntries(): Promise<Array<SubClockEntry>> {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(SUBCLOCKS_STORE_NAME, 'readonly');
+            const objectStore = transaction.objectStore(SUBCLOCKS_STORE_NAME);
+            const entries = new Array<SubClockEntry>();
+            const cursor = objectStore.openCursor();
+            cursor.onsuccess = (e) => {
+                const target = e.target as IDBRequest;
+                if (target.result) {
+                    entries.push(target.result.value);
+                    target.result.continue();
+                } else {
+                    resolve(entries);
+                }
+            };
+            cursor.onerror = (e) => reject(e);
+        });
+    }
+
+    storeEntries(entries: Array<SubClockEntry>): Promise<void> {
+        const transaction = this.db.transaction(SUBCLOCKS_STORE_NAME, 'readwrite');
+        const objectStore = transaction.objectStore(SUBCLOCKS_STORE_NAME);
+        return this.clearStore(objectStore)
+            .then(() => this.addEntries(entries, objectStore));
+    }
+
+    private clearStore(store: IDBObjectStore) {
+        const request = store.clear();
+        return new Promise((resolve, reject) => {
+            request.onsuccess = (e) => resolve(e);
+            request.onerror = (e) => reject(e);
+        });
+    }
+
+    private async addEntries(entries: Array<SubClockEntry>, store:IDBObjectStore) {
+        const addEntry = (entry: SubClockEntry) => {
+            return new Promise((resolve, reject) => {
+                const request = store.add(entry);
+                request.onsuccess = (e) => resolve(e);
+                request.onerror = (e) => reject(e);
+            });
+        };
+        for (let i = 0; i < entries.length; i++) {
+            const entry = entries[i];
+            await addEntry(entry);
+        }
+    }
 }
 
 // --- APIs
@@ -82,6 +132,7 @@ function getCityEntry(description: string, placeId: string): Promise<SubClockEnt
                 formattedAddress: detail.formatted_address,
                 description: description,
                 utcOffsetInMinuts: detail.utc_offset,
+                sortOrder: Date.now(),
             }
         });
 }
@@ -125,6 +176,7 @@ class SubClockAddPane {
             name: place.name,
             formattedAddress: place.formatted_address,
             utcOffsetInMinuts: place.utc_offset,
+            sortOrder: Date.now(),
         };
         this.app.addSubClock(entry);
     }
@@ -133,14 +185,19 @@ class SubClockAddPane {
 // --- App
 
 class App {
-    private previousDate?: Date;
     private subclocks: Array<SubClockEntry>;
+    private subClocksStore: SubClocksStore;
+
+    private previousDate?: Date;
     private showSettings: boolean;
 
     private addPane: SubClockAddPane;
 
-    constructor(subclocks: Array<SubClockEntry>) {
+    constructor(subclocks: Array<SubClockEntry>, subClocksStore: SubClocksStore) {
         this.subclocks = subclocks;
+        this.subclocks.sort((a, b) => a.sortOrder - b.sortOrder);
+        this.subClocksStore = subClocksStore;
+
         this.addPane = new SubClockAddPane(this);
         this.showSettings = false;
 
@@ -156,7 +213,7 @@ class App {
 
     addSubClock(entry: SubClockEntry) {
         this.subclocks.push(entry);
-        storeSubClockEntries(this.subclocks)
+        this.subClocksStore.storeEntries(this.subclocks)
             .then(() => this.invalidate());
     }
 
@@ -168,7 +225,7 @@ class App {
             }
         }
         this.subclocks = subclocks;
-        storeSubClockEntries(this.subclocks)
+        this.subClocksStore.storeEntries(this.subclocks)
             .then(() => this.invalidate());
     }
 
@@ -267,8 +324,12 @@ class App {
 // --- Init
 
 function init() {
-    getSubClockEntries().then(entries => {
-        const app = new App(entries);
+    let subClocksStore: SubClocksStore;
+    createSubClocksStore().then(store => {
+        subClocksStore = store;
+        return store.getEntries();
+    }).then(entries => {
+        const app = new App(entries, subClocksStore);
         app.start();
     });
 }
