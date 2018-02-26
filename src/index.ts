@@ -57,7 +57,27 @@ class SubClocksStore {
         });
     }
 
-    storeEntries(entries: Array<SubClockEntry>): Promise<void> {
+    addEntry(entry: SubClockEntry): Promise<void> {
+        const transaction = this.db.transaction(SUBCLOCKS_STORE_NAME, 'readwrite');
+        const objectStore = transaction.objectStore(SUBCLOCKS_STORE_NAME);
+        const request = objectStore.add(entry);
+        return new Promise((resolve, reject) => {
+            request.onsuccess = () => resolve();
+            request.onerror = reject;
+        });
+    }
+
+    removeEntry(entry: SubClockEntry): Promise<void> {
+        const transaction = this.db.transaction(SUBCLOCKS_STORE_NAME, 'readwrite');
+        const objectStore = transaction.objectStore(SUBCLOCKS_STORE_NAME);
+        const request = objectStore.delete(entry.placeId);
+        return new Promise((resolve, reject) => {
+            request.onsuccess = () => resolve();
+            request.onerror = reject;
+        });
+    }
+
+    addEntries(entries: Array<SubClockEntry>): Promise<void> {
         const transaction = this.db.transaction(SUBCLOCKS_STORE_NAME, 'readwrite');
         const objectStore = transaction.objectStore(SUBCLOCKS_STORE_NAME);
         return this.clearStore(objectStore)
@@ -214,7 +234,7 @@ class App {
 
     addSubClock(entry: SubClockEntry) {
         this.subclocks.push(entry);
-        this.subClocksStore.storeEntries(this.subclocks)
+        this.subClocksStore.addEntry(entry)
             .then(() => this.invalidate());
     }
 
@@ -226,7 +246,7 @@ class App {
             }
         }
         this.subclocks = subclocks;
-        this.subClocksStore.storeEntries(this.subclocks)
+        this.subClocksStore.removeEntry(target)
             .then(() => this.invalidate());
     }
 
