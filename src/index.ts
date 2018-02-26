@@ -77,7 +77,11 @@ class SubClocksStore {
         });
     }
 
+<<<<<<< HEAD
     storeEntries(entries: Array<SubClockEntry>): Promise<void> {
+=======
+    addEntries(entries: Array<SubClockEntry>): Promise<void> {
+>>>>>>> 5c570f5ab1a284650d03144ecff538ebbe2ac044
         const transaction = this.db.transaction(SUBCLOCKS_STORE_NAME, 'readwrite');
         const objectStore = transaction.objectStore(SUBCLOCKS_STORE_NAME);
         return this.clearStore(objectStore)
