@@ -4,20 +4,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Clock</title>
-    <link href="https://fonts.googleapis.com/css?family=Arima+Madurai" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Acme" rel="stylesheet">
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBn2SZTmO4qzDXT2-KOCFR6nkpEqgRdu9Y&language=en&libraries=places"></script>
     <script defer src="index.js"></script>
   </head>
   <body>
     <style>
       :root {
-        --primary-font-family: 'Arima Madurai', cursive;
-        --clock-color: #444;
+        --primary-font-family: 'Acme', sans-serif;
+        --primary-color: #555;
       }
 
       html { height: 100%; }
       body {
         font-family: var(--primary-font-family);
+        color: var(--primary-color);
         margin: 0;
         padding: 0;
         height: 100%;
@@ -57,7 +58,6 @@
       }
       .main-clock-time {
         font-weight: bold;
-        color: var(--clock-color);
         font-size: 3.0rem;
       }
       .subclock-container {
@@ -85,7 +85,6 @@
       }
       .subclock-time {
         font-weight: bold;
-        color: var(--clock-color);
         font-size: 2.5rem;
       }
     </style>
