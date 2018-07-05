@@ -1,11 +1,3 @@
-# nt-clock
+# Tokei
 
-A clock app. 
-
-## Usage
-
-```sh
-$ npm install
-$ npm run build
-$ npm run dev
-```
+A clock web app similar to Android's clock app.

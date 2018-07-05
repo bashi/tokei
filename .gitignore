@@ -1,4 +1,2 @@
-.firebaserc
+docs/*.js
 node_modules/
-package-lock.json
-public/*.js
