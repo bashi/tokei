@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "newLine": "LF",
         "outDir": "./docs/",
         "strict": true,
         "module": "commonjs",

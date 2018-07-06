@@ -110,25 +110,6 @@ function createSubClocksStore(): Promise<SubClocksStore> {
 
 declare const google: any;
 
-function autocompleteCity(city: string): Promise<Array<any>> {
-  const service: any = new google.maps.places.AutocompleteService();
-  const params = {
-    input: city,
-    types: ['(cities)']
-  };
-  return new Promise((resolve, reject) => {
-    service.getPlacePredictions(params, (pred: any, status: string) => {
-      if (status === 'ZERO_RESULTS') {
-        resolve([]);
-      }
-      if (status !== 'OK') {
-        reject(status);
-      }
-      resolve(pred);
-    });
-  });
-}
-
 function placeDetails(placeId: string): Promise<any> {
   const div = document.createElement('div');
   const service: any = new google.maps.places.PlacesService(div);

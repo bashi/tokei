@@ -96,24 +96,6 @@ function createSubClocksStore() {
         request.onsuccess = () => resolve(new SubClocksStore(request.result));
     });
 }
-function autocompleteCity(city) {
-    const service = new google.maps.places.AutocompleteService();
-    const params = {
-        input: city,
-        types: ['(cities)']
-    };
-    return new Promise((resolve, reject) => {
-        service.getPlacePredictions(params, (pred, status) => {
-            if (status === 'ZERO_RESULTS') {
-                resolve([]);
-            }
-            if (status !== 'OK') {
-                reject(status);
-            }
-            resolve(pred);
-        });
-    });
-}
 function placeDetails(placeId) {
     const div = document.createElement('div');
     const service = new google.maps.places.PlacesService(div);
