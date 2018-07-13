@@ -139,6 +139,8 @@ function getCityEntry(description: string, placeId: string): Promise<SubClockEnt
 
 // --- New SubClock
 
+// TODO: Hide the pane when pressed esc key
+
 class SubClockAddPane {
   private app: App;
   private el: HTMLElement;
@@ -160,6 +162,7 @@ class SubClockAddPane {
 
   show() {
     this.el.hidden = false;
+    this.queryEl.focus();
   }
 
   hide() {
@@ -179,6 +182,7 @@ class SubClockAddPane {
       sortOrder: Date.now()
     };
     this.app.addSubClock(entry);
+    this.queryEl.value = '';
   }
 }
 

@@ -122,6 +122,7 @@ function getCityEntry(description, placeId) {
     });
 }
 // --- New SubClock
+// TODO: Hide the pane when pressed esc key
 class SubClockAddPane {
     constructor(app) {
         this.app = app;
@@ -136,6 +137,7 @@ class SubClockAddPane {
     }
     show() {
         this.el.hidden = false;
+        this.queryEl.focus();
     }
     hide() {
         this.el.hidden = true;
@@ -153,6 +155,7 @@ class SubClockAddPane {
             sortOrder: Date.now()
         };
         this.app.addSubClock(entry);
+        this.queryEl.value = '';
     }
 }
 // --- App

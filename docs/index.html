@@ -8,23 +8,16 @@
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBn2SZTmO4qzDXT2-KOCFR6nkpEqgRdu9Y&language=en&libraries=places"></script>
     <script defer src="index.js"></script>
     <style>
-      :root {
-        --primary-font-family: 'Lato', sans-serif;
-        --primary-color: #555;
-      }
-
-      html { height: 100%; }
-
       body {
-        font-family: var(--primary-font-family);
-        color: var(--primary-color);
+        font-family: 'Lato', sans-serif;
+        color: #555;
         margin: 0;
         padding: 0;
-        height: 100%;
+        display: flex;
+        flex-direction: column;
       }
 
       .header {
-        box-sizing: border-box;
         display: flex;
         flex-direction: row-reverse;
         padding: 1rem;
@@ -35,7 +28,6 @@
       }
 
       .main {
-        height: 100%;
         display: flex;
         padding: 1rem;
         flex-direction: column;
@@ -46,16 +38,22 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        font-size: 1.5rem;
-        margin-bottom: 2rem;
+        padding-bottom: 2rem;
       }
 
       .main-clock-time {
         font-weight: bold;
-        font-size: 3.0rem;
+        font-size: 3rem;
+      }
+
+      .main-clock-date {
+        font-size: 1.5rem;
       }
 
       .subclock-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         margin-bottom: 1rem;
       }
 
@@ -66,13 +64,18 @@
         align-items: center;
       }
 
+      .subclock-time {
+        font-weight: bold;
+        font-size: 2.5rem;
+      }
+
       .subclock-container {
         display: flex;
+        padding: .5rem;
       }
 
       .subclock-actions {
         margin-left: 1rem;
-        display: flex;
       }
 
       .actions-hidden {
@@ -81,11 +84,6 @@
 
       .subclock-remove {
         cursor: pointer;
-      }
-
-      .subclock-time {
-        font-weight: bold;
-        font-size: 2.5rem;
       }
     </style>
   </head>
